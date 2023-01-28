@@ -2,6 +2,8 @@ import os
 import sys
 import csv
 import string
+import json
+
 
 
 BIBLE = None
@@ -86,6 +88,17 @@ def show_verses(word, page=0, all=False):
     output.append(bible[item[0]])
   
   return output
+
+
+def output_conc(filenym="concordance.json"):
+  conc = load_concordance()
+  fullnym = "data/output/" + filenym
+  outstr = json.dumps(conc)
+  outfile = open(fullnym, "w")
+  outfile.write(outstr)
+  outfile.close()
+  
+
 
 
 if __name__ == "__main__":
