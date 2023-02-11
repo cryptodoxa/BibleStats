@@ -10,8 +10,6 @@ BIBLE = None
 FREQ = None
 CONC = None
 
-def get_script_path():
-  return os.path.dirname(os.path.realpath(sys.argv[0]))
 
 def load_bible():
   global BIBLE
@@ -90,7 +88,7 @@ def show_verses(word, page=0, all=False):
   return output
 
 
-def output_conc(filenym="concordance.json"):
+def output_conc_json(filenym="concordance.json"):
   conc = load_concordance()
   fullnym = "data/output/" + filenym
   outstr = json.dumps(conc)
@@ -98,8 +96,30 @@ def output_conc(filenym="concordance.json"):
   outfile.write(outstr)
   outfile.close()
   
+def output_bible_json(filenym="kjv.json"):
+  outfilenym = "data/output/" + filenym
+  bible = load_bible()
+  outdata = []
+  output = [verse[4] for verse in bible]
+  outstr = json.dumps(output)
+  outfile = open(outfilenym, "w")
+  outfile.write(outstr)
+  outfile.close()
 
-
+def output_toc_json(filenym="toc.json"):
+  # Table of Contents (toc) maps book number to book name
+  infilenym = "data/csv/key_english.csv"
+  outfilenym = "data/output/" + filenym
+  with open(infilenym) as f:
+    reader = csv.reader(f)
+    data = list(reader)
+    data.pop(0) # headers
+  output_data = {}
+  for item in data:
+    output_data[item[0]] = item[1]
+  outfile = open(outfilenym, "w")
+  outfile.write(json.dumps(output_data))
+  outfile.close()
 
 if __name__ == "__main__":
   print("hello world")
