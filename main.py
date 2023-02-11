@@ -61,7 +61,8 @@ def load_concordance():
       if data.get(word):
         old = data.get(word)
         old[0]+= 1
-        old.append(site)
+        if not site in old:
+          old.append(site)
         data[word] = old
       else:
         data[word] = [1, site]
