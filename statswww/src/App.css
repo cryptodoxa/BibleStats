@@ -2,6 +2,11 @@
   text-align: center;
 }
 
+.title {
+  font-size: 300%;
+  margin: 20px 0px;
+}
+
 .main-container {
   display: flex;
   flex-direction: row;
@@ -11,11 +16,37 @@
   width: 50%;
 }
 
-.conc-word {
+.matchedList .shortest {
+  font-weight: bolder;
+  margin: 10px 0px;
   cursor: pointer;
   display: inline-block;
 }
 
+.matchedList .word {
+  cursor: pointer;
+  display: inline-block;
+}
+
+.active-word {
+  font-size: 150%;
+  text-align: center;
+}
+
+.verses {
+  text-align: left;
+  max-width: 60ch;
+}
+
+.verse-container {
+  margin: 2em auto;
+  border-bottom: grey solid;
+}
+
+.verse-text {
+  margin: 1em auto;
+  font-size: 90%;
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {

@@ -9,6 +9,8 @@ import json
 BIBLE = None
 FREQ = None
 CONC = None
+KJV_DISCARD = ['the','and','of','to','that','in','he','shall','unto','for','i','his','a','they',
+  'be','is','him','not','them','it','with','thou','thy','was','as','are']
 
 
 def load_bible():
@@ -55,8 +57,10 @@ def load_concordance():
   for idx, verse in enumerate(bible):
     text = verse[4]
     #removes punctutation and lowercases
-    words = [word.translate(str.maketrans('', '', string.punctuation)).lower() for word in text.split(" ")]
+    words = [word.strip(string.punctuation).lower() for word in text.split(" ")]
     for word in words:
+      if word in KJV_DISCARD:
+        continue
       site = (idx,verse[1],verse[2], verse[3]) #index num, book, chapter, verse
       if data.get(word):
         old = data.get(word)
