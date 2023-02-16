@@ -1,4 +1,5 @@
 import './App.css';
+import backArrow from './images/back.svg';
 import React, { useState } from 'react';
 import conc from './data/concordance.json';
 import toc from './data/toc.json';
@@ -17,6 +18,7 @@ class App extends React.Component {
       locations: [],
       wordList: [],
       shortestMatch: null,
+      lastSearch: null,
       matchCount: 0
     };
   }
@@ -25,7 +27,7 @@ class App extends React.Component {
     const value = e.target.value;
     
     if (!value) {
-      this.setState({wordList: [], shortestMatch: null, matchCount: 0});
+      this.setState({wordList: [], shortestMatch: null, matchCount: 0, lastSearch: null});
     } else {
       const newData = ggallwords.filter(el => el.toLowerCase().includes(value.toLowerCase()));
       const shortestMatch = newData.reduce((a,b) => { return a.length <= b.length ? a : b;});
@@ -33,7 +35,8 @@ class App extends React.Component {
       this.setState({
         wordList: newData.slice(0,100), // first 100, for performance and readability
         shortestMatch: shortestMatch,
-        matchCount: newData.length
+        matchCount: newData.length,
+        lastSearch: value
       });
     }
   }
@@ -56,6 +59,7 @@ class App extends React.Component {
       display = <WordList words={this.state.wordList} 
       matchCount={this.state.matchCount}
       shortestMatch={this.state.shortestMatch} 
+      lastSearch={this.state.lastSearch}
       onChange={this.handleOnTextChange}
       onClick={this.handleWordClick}/>
     } else {
@@ -87,7 +91,7 @@ class WordList extends React.Component {
     return (
       <div className="wordList">
         <div className="searchTitle">Search for a word!</div>
-        <div><input onChange={this.props.onChange} placeholder="search..."/></div>
+        <div><input onChange={this.props.onChange} placeholder="search..." value={this.props.lastSearch}/></div>
         <div className="matchCount">{matchCount + " matches"}</div>
         {this.props.words.length > 0 && <div className="title">shortest match:</div> }
         <div className="shortest" onClick={this.props.onClick} data-value={this.props.shortestMatch}>
@@ -110,11 +114,37 @@ class WordList extends React.Component {
 
 
 class VerseDisplay extends React.Component {
+  constructor(props){
+    super(props);
+    const count = conc[this.props.selected][0];
+    const pageCount = count / 20;
+    this.state = {
+      page: 0,
+      pageSize: 20,
+      pageCount: pageCount
+    };
+  }
+
+  handlePageBack = () => {
+    const page = this.state.page - 1 > 0 ? this.state.page - 1 : 0;
+    this.setState({page: page});
+  }
+
+  handlePageForward = () => {
+    const page = this.state.page + 1 < this.state.pageCount - 1 ? this.state.page + 1 : this.state.pageCount - 1;
+    this.setState({page: page});
+  }
+
   render() {
-    const locations = this.props.selected ? conc[this.props.selected].slice(1) : []
+    const start = this.state.pageSize * this.state.page + 1;
+    const end = start + this.state.pageSize;
+    const locations = conc[this.props.selected].slice(start, end);
+    const count = conc[this.props.selected][0];
+
     const displayLocations = locations.map((location, idx) => {
       return toc[location[1]] + " " + location[2] + ":" + location[3];
     });
+
     const displayText = locations.map((location, idx) => {
       const text = bible[location[0]];
       const highlights = text.toLowerCase().replace(ggpunctuationregex, "").split(' ').map((t) => {
@@ -134,21 +164,25 @@ class VerseDisplay extends React.Component {
       return results;
     });
 
-    if(this.props.selected) {
-      return (
-        <div>
-          <div className="back-button" onClick={this.props.onBack}>X Back</div>
-          <div className="active-word">
-            {this.props.selected}
-          </div>
-          {locations.map( (location, idx) => {
-            return (
-              <Verse key={displayLocations[idx]+idx} index={displayLocations[idx]} text={displayText[idx]} />  
-            )
-          })}
+    return (
+      <div className="verses">
+        <div className="back-button" onClick={this.props.onBack}> <img src={backArrow} 
+          alt="back" height="25" width="25"/><span className="back-text">back</span></div>
+        <div className="active-word">
+          {this.props.selected} 
         </div>
-      )
-    }
+        <div className="occurences">({count} occurences)</div>
+        <div className="page-buttons">
+          { this.state.page > 0 && <span className="back-button" onClick={this.handlePageBack}>&lt; page back</span> }
+          { this.state.page < this.state.pageCount - 1 && <span className="forward-button" onClick={this.handlePageForward}>page forward &gt;</span> }
+        </div>
+        {locations.map( (location, idx) => {
+          return (
+            <Verse key={displayLocations[idx]+idx} index={displayLocations[idx]} text={displayText[idx]} />  
+          )
+        })}
+      </div>
+    )
   }
 }
 

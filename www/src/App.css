@@ -8,7 +8,7 @@
 }
 
 .main-container {
-  max-width: 60ch;
+  max-width: 50ch;
   margin: auto;
 }
 
@@ -53,9 +53,43 @@
 }
 
 .verses .back-button {
-  font-size: 200%;
+  font-size: 150%;
   cursor: pointer;
+}
+
+.verses .back-button img {
+  vertical-align: middle;
+}
+
+.verses .page-buttons {
+  font-size: 100%;
+  color: blue;
+  cursor: pointer;
+}
+
+.verses .page-buttons .back-button {
   text-align: left;
+  font-size: 100%;
+  float: left;
+}
+
+.verses .page-buttons .forward-button {
+  text-align: right;
+  font-size: 100%;
+  float: right;
+}
+
+
+.verses .occurences {
+  font-size: 80%;
+  font-style: italic;
+  color: grey;
+  text-align: center;
+}
+
+
+.verses .back-text {
+  vertical-align: middle;
 }
 
 .verse-container {
@@ -66,34 +100,4 @@
 .verse-text {
   margin: 1em auto;
   font-size: 90%;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
 }

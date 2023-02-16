@@ -10,7 +10,7 @@ BIBLE = None
 FREQ = None
 CONC = None
 KJV_DISCARD = ['the','and','of','to','that','in','he','shall','unto','for','i','his','a','they',
-  'be','is','him','not','them','it','with','thou','thy','was','as','are']
+  'be','is','him','not','them','it','with','thou','thy','was','as','are', 'at', 'me', 'she']
 
 
 def load_bible():
