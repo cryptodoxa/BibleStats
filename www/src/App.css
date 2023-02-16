@@ -4,28 +4,42 @@
 
 .title {
   font-size: 300%;
-  margin: 20px 0px;
+  margin: 10px 0px 20px 0px;
 }
 
 .main-container {
-  display: flex;
-  flex-direction: row;
+  max-width: 60ch;
+  margin: auto;
 }
 
-.list {
-  width: 50%;
+.wordList .matchCount {
+  font-size: 80%;
+  font-style: italic;
+  color: grey;
 }
 
-.matchedList .shortest {
+.wordList .shortest {
   font-weight: bolder;
-  margin: 10px 0px;
+  margin: 3px auto 10px auto;
   cursor: pointer;
   display: inline-block;
 }
 
-.matchedList .word {
+.wordList .searchTitle {
+  font-size: 100%;
+  margin: 10px auto;
+}
+
+.wordList .word {
   cursor: pointer;
   display: inline-block;
+}
+
+.wordList .title {
+  border-bottom: black solid;
+  width: 14em;
+  margin: 10px auto;
+  font-size: 100%;
 }
 
 .active-word {
@@ -36,6 +50,12 @@
 .verses {
   text-align: left;
   max-width: 60ch;
+}
+
+.verses .back-button {
+  font-size: 200%;
+  cursor: pointer;
+  text-align: left;
 }
 
 .verse-container {

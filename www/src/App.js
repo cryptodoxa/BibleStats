@@ -16,23 +16,24 @@ class App extends React.Component {
       selected: null,
       locations: [],
       wordList: [],
-      shortestMatch: null
+      shortestMatch: null,
+      matchCount: 0
     };
   }
 
   handleOnTextChange = (e) => {
-    console.log(e.target.value);
     const value = e.target.value;
-    console.log(bible);
+    
     if (!value) {
-      this.setState({wordList: [], shortestMatch: null});
+      this.setState({wordList: [], shortestMatch: null, matchCount: 0});
     } else {
       const newData = ggallwords.filter(el => el.toLowerCase().includes(value.toLowerCase()));
       const shortestMatch = newData.reduce((a,b) => { return a.length <= b.length ? a : b;});
-      console.log(shortestMatch);
+
       this.setState({
         wordList: newData.slice(0,100), // first 100, for performance and readability
-        shortestMatch: shortestMatch
+        shortestMatch: shortestMatch,
+        matchCount: newData.length
       });
     }
   }
@@ -45,18 +46,31 @@ class App extends React.Component {
     });
   }
 
+  handleOnBack = (e) => {
+    this.setState({selected: null});
+  }
+
   render() {
+    let display;
+    if (!this.state.selected){
+      display = <WordList words={this.state.wordList} 
+      matchCount={this.state.matchCount}
+      shortestMatch={this.state.shortestMatch} 
+      onChange={this.handleOnTextChange}
+      onClick={this.handleWordClick}/>
+    } else {
+      display = <VerseDisplay 
+      selected={this.state.selected}
+      onBack={this.handleOnBack}
+      />
+    }
+
     return (
       <div className="App">
-        <div className="title">Super Concordance</div>
+        <div className="prelude">Welcome to...</div>
+        <div className="title">Nifty Bible Concordance</div>
         <div className="main-container">
-          <div className="list">
-            <input onChange={this.handleOnTextChange} placeholder="search..."/>
-            <MatchedList words={this.state.wordList} shortestMatch={this.state.shortestMatch} onClick={this.handleWordClick}/>
-          </div>
-          <div className="verses">
-            <VerseDisplay selected={this.state.selected}/>
-          </div>
+          {display}
         </div>
       </div>
     );
@@ -65,14 +79,22 @@ class App extends React.Component {
 }
 
 
-class MatchedList extends React.Component {
+class WordList extends React.Component {
+
   render(){
+    const matchCount = this.props.matchCount > 100 ? "100+" : this.props.matchCount;
+    
     return (
-      <div className="matchedList">
+      <div className="wordList">
+        <div className="searchTitle">Search for a word!</div>
+        <div><input onChange={this.props.onChange} placeholder="search..."/></div>
+        <div className="matchCount">{matchCount + " matches"}</div>
+        {this.props.words.length > 0 && <div className="title">shortest match:</div> }
         <div className="shortest" onClick={this.props.onClick} data-value={this.props.shortestMatch}>
           {this.props.shortestMatch}
         </div>
         <div>
+          {this.props.words.length > 0 && <div className="title">other matches:</div>}
           {this.props.words.map( (word, key) => {
             return (
               <div key={word} >
@@ -115,6 +137,7 @@ class VerseDisplay extends React.Component {
     if(this.props.selected) {
       return (
         <div>
+          <div className="back-button" onClick={this.props.onBack}>X Back</div>
           <div className="active-word">
             {this.props.selected}
           </div>
