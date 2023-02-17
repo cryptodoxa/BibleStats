@@ -167,7 +167,7 @@ class VerseDisplay extends React.Component {
     return (
       <div className="verses">
         <div className="back-button" onClick={this.props.onBack}> <img src={backArrow} 
-          alt="back" height="25" width="25"/><span className="back-text">back</span></div>
+          alt="back" height="15" width="15"/><span className="back-text"> back</span></div>
         <div className="active-word">
           {this.props.selected} 
         </div>

@@ -8,7 +8,7 @@
 }
 
 .main-container {
-  max-width: 50ch;
+  max-width: 52ch;
   margin: auto;
 }
 
@@ -50,6 +50,7 @@
 .verses {
   text-align: left;
   max-width: 60ch;
+  margin: 10px;
 }
 
 .verses .back-button {
