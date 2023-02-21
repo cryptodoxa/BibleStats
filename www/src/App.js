@@ -72,7 +72,7 @@ class App extends React.Component {
     return (
       <div className="App">
         <div className="prelude">Welcome to...</div>
-        <div className="title">Nifty Bible Concordance</div>
+        <div className="title">Nifty Bible Stats</div>
         <div className="main-container">
           {display}
         </div>
