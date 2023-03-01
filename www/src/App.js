@@ -1,12 +1,24 @@
 import './App.css';
 import backArrow from './images/back.svg';
-import React, { useState } from 'react';
+import React from 'react';
 import conc from './data/concordance.json';
 import toc from './data/toc.json';
 import bible from './data/kjv.json';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 
 const ggallwords = Object.keys(conc).sort(); 
 const ggpunctuationregex = /[.,\/#!$%\^&\*;:{}=\_`~()]/g
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
+const labels = Object.values(toc);
 
 
 class App extends React.Component {
@@ -138,7 +150,8 @@ class VerseDisplay extends React.Component {
   render() {
     const start = this.state.pageSize * this.state.page + 1;
     const end = start + this.state.pageSize;
-    const locations = conc[this.props.selected].slice(start, end);
+    const allLocations = conc[this.props.selected];
+    const locations = allLocations.slice(start, end);
     const count = conc[this.props.selected][0];
 
     const displayLocations = locations.map((location, idx) => {
@@ -171,6 +184,7 @@ class VerseDisplay extends React.Component {
         <div className="active-word">
           {this.props.selected} 
         </div>
+        <VerseGraph locations={allLocations}/>
         <div className="occurences">({count} occurences)</div>
         <div className="page-buttons">
           { this.state.page > 0 && <span className="back-button" onClick={this.handlePageBack}>&lt; page back</span> }
@@ -185,6 +199,54 @@ class VerseDisplay extends React.Component {
     )
   }
 }
+
+
+class VerseGraph extends React.Component {
+
+  constructor(props){
+    super(props);
+
+    let count = {};
+    for (let i = 1; i < labels.length + 1; i++) {
+      count[i] = 0;
+    }
+
+    const res = props.locations.map((loc) => {return loc[1]}).forEach((loc) => {count[loc] += 1;});
+
+    this.data = {
+      labels,
+      datasets: [
+        {
+          label: "",
+          data: Object.values(count),
+          backgroundColor: 'rgba(255, 99, 132, 0.5)',
+        }
+      ],
+    };
+
+    this.options = {
+      responsive: true,
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontSize: 6
+          }
+        }]
+      },
+      plugins: {
+        legend: {
+          display: false
+        }
+      }
+    };
+  }
+
+  render() {  
+  
+    return <Bar options={this.options} data={this.data} />;
+  }
+}
+
 
 class Verse extends React.Component {
 
