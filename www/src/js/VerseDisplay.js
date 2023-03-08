@@ -79,7 +79,7 @@ const VerseDisplay = () => {
       <div className="active-word">
         {params.word} 
       </div>
-      <VerseGraph locations={allLocations}/>
+      <VerseGraph />
       <div className="occurences">({count} occurences)</div>
       <div className="page-buttons">
         { state.page > 0 && <span className="back-button" onClick={handlePageBack}>&lt; page back</span> }
@@ -96,68 +96,64 @@ const VerseDisplay = () => {
 }
 
 
-class VerseGraph extends React.Component {
+const VerseGraph = () => {
 
-  constructor(props){
-    super(props);
+  const params = useParams();
+  const allLocations = conc[params.word];
 
-    let count = {};
-    for (let i = 1; i < labels.length + 1; i++) {
-      count[i] = 0;
-    }
+  let count = {};
+  for (let i = 1; i < labels.length + 1; i++) {
+    count[i] = 0;
+  }
 
-    const res = props.locations.map((loc) => {return loc[1]}).forEach((loc) => {count[loc] += 1;});
+  const res = allLocations.map((loc) => {return loc[1]}).forEach((loc) => {count[loc] += 1;});
 
-    this.data = {
-      labels,
-      datasets: [
-        {
-          label: "",
-          data: Object.values(count),
-          backgroundColor: 'rgba(255, 99, 132, 0.5)',
-        }
-      ],
-    };
-
-    this.options = {
-      responsive: true,
-      options: {
-        scales: {
-          xAxes: [{
-            ticks: {
-              fontSize: 12
-            }
-          }]
-        }
-      },
-      plugins: {
-        legend: {
-          display: false
-        }
+  const data = {
+    labels,
+    datasets: [
+      {
+        label: "",
+        data: Object.values(count),
+        backgroundColor: 'rgba(255, 99, 132, 0.5)',
       }
-    };
-  }
+    ],
+  };
 
-  render() {  
-  
-    return <Bar options={this.options} data={this.data} />;
-  }
+  const options = {
+    responsive: true,
+    options: {
+      scales: {
+        xAxes: [{
+          ticks: {
+            fontSize: 12
+          }
+        }]
+      }
+    },
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  };
+
+  return (
+    <Bar options={options} data={data} />
+  )
 }
 
 
-class Verse extends React.Component {
+function Verse({index, text}) {
 
-  render() {
-    return ( 
-      <div className="verse-container">
-        <div className="verse-title">
-          {this.props.index}
-        </div>
-        <div className="verse-text" dangerouslySetInnerHTML={{__html: '<span>' + this.props.text + '</span>'}}>
-        </div>
+  return ( 
+    <div className="verse-container">
+      <div className="verse-title">
+        {index}
       </div>
+      <div className="verse-text" dangerouslySetInnerHTML={{__html: '<span>' + text + '</span>'}}>
+      </div>
+    </div>
     )
-  }
 }
 
 export default VerseDisplay;
