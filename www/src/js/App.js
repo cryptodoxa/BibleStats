@@ -20,7 +20,6 @@ const App = () => {
       <div className="title">Nifty Bible Stats</div>
       <div className="navbar">
         <Link to="/concordance/search">Concordance</Link>
-        <Link to="/about">About</Link>
         <Link to="/roadmap">Roadmap</Link>
       </div>
       <div className="main-container">

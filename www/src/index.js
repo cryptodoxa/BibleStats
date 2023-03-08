@@ -10,7 +10,6 @@ import ErrorPage from './js/error-page';
 import VerseDisplay from './js/VerseDisplay';
 import Search from './js/Search';
 import RoadMap from './js/Roadmap';
-import About from './js/About';
 
 const router = createBrowserRouter([{
   path: "/",
@@ -28,10 +27,6 @@ const router = createBrowserRouter([{
     {
       path: "roadmap",
       element: <RoadMap />
-    },
-    {
-      path: "about",
-      element: <About />
     }
   ]
 }])
