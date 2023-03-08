@@ -9,12 +9,6 @@ const App = () => {
     window.location.replace("/concordance/search");
   }
 
-  const locations = [
-    "/concordance/search",
-    "/about",
-    "/roadmap"
-  ];
-  
   return (
     <div className="App">
       <div className="title">Nifty Bible Stats</div>
