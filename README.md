@@ -1,1 +1,1 @@
-# BibleStats
+Live at https://niftybiblestats.com
